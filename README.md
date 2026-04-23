@@ -110,17 +110,17 @@ curl -X DELETE http://localhost:8080/api/v1/rooms/ENG-201
 
 ---
 
-### Part 1.1 — JAX-RS Resource Lifecycle
+### Part 1.1 - The Lifecycle of a Resource JAX-RS
+Question: What is the default lifecycle of a resource class for JAX-RS? Does this mean a new instance is created for each request or is it a singleton? What does this mean for data management in memory?
 
-**Question:** Explain the default lifecycle of a JAX-RS Resource class. Is a new instance created per request or is it a singleton? How does this impact in-memory data management?
+Answer:
 
-**Answer:**
+By default, JAX-RS uses a request-scoped lifecycle: For each HTTP request, a new instance of each resource class is created and discarded once the response has been sent; this adds to the PerRequest scope defined by JAX-RS.
 
-By default, JAX-RS follows a **request-scoped lifecycle**: a brand-new instance of each resource class is instantiated for every incoming HTTP request and discarded when the response is sent. This is the `PerRequest` scope defined by the JAX-RS specification.
+The request-scoped status of resource classes presents one significant issue for in-memory state. When a resource class holds instance variables (e.g., HashMap), each request will see an empty instance of the Resource class; each instance of the resource class will have an empty HashMap<String, Room> each time it is created. In this case, it appears no data will exist across calls/requests. To accommodate this design, all shared state in this project is kept in a singleton DataStore instance (DataStore.getInstance()), which exists for the entire lifetime of the JVM. Resource instances simply retrieve a reference to DataStore when they are created.
 
-This design has a critical consequence for in-memory state. If resource classes held instance variables such as a `HashMap<String, Room>`, each request would see a freshly initialised, empty map — data would never persist between calls. To solve this, all shared state in this project is held in the **`DataStore` singleton** (`DataStore.getInstance()`), which lives for the entire JVM lifetime. Resource instances simply obtain a reference to it on construction.
+Furthermore, since multiple requests can be handled at the same time and since JAX-RS is likely to process these requests concurrently on different threads, standard HashMap and ArrayList collections are susceptible to race conditions (for example two threads inserting records simultaneously into a standard list could interrupt each other's operation) therefore to prevent any potential data loss, this project uses ConcurrentHashMap and CopyOnWriteArrayList, both of which are designed to be thread-safe.
 
-Additionally, because multiple requests can arrive simultaneously and JAX-RS may process them on different threads, ordinary `HashMap` or `ArrayList` collections would be vulnerable to race conditions (e.g., two threads inserting simultaneously could corrupt internal state). This project uses **`ConcurrentHashMap`** and **`CopyOnWriteArrayList`** — both thread-safe — to prevent data loss or corruption without the overhead of explicit `synchronized` blocks.
 
 ---
 
