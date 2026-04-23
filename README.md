@@ -1,4 +1,4 @@
- Smart Campus Sensor & Room Management API
+# Smart Campus Sensor & Room Management API
 
 A RESTful API built with **JAX-RS (Jersey)** and an embedded **Grizzly HTTP server** for the University of Westminster's "Smart Campus" initiative. It manages Rooms and IoT Sensors across campus with full CRUD operations, nested sub-resources, and a robust error-handling strategy.
 
@@ -30,42 +30,6 @@ All data is stored in-memory using `ConcurrentHashMap` and `CopyOnWriteArrayList
 | JSON | Jackson (via jersey-media-json-jackson) |
 | Build Tool | Maven 3 |
 | Language | Java 11 |
-
----
-
-## How to Build and Run
-
-### Prerequisites
-- Java 11 or higher
-- Maven 3.6 or higher
-
-### Step 1 – Clone the repository
-```bash
-git clone https://github.com/<your-username>/smart-campus-api.git
-cd smart-campus-api
-```
-
-### Step 2 – Build the fat JAR
-```bash
-mvn clean package
-```
-This produces `target/smart-campus-api-1.0-SNAPSHOT.jar` (a self-contained executable JAR).
-
-### Step 3 – Run the server
-```bash
-java -jar target/smart-campus-api-1.0-SNAPSHOT.jar
-```
-
-The server starts on **http://localhost:8080/api/v1**.
-
-You should see:
-```
-=================================================
- Smart Campus API is running!
- Base URL : http://localhost:8080/api/v1
- Press CTRL+C to stop.
-=================================================
-```
 
 ---
 
