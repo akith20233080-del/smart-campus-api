@@ -41,7 +41,14 @@ public class RoomResource {
         URI location = URI.create("/api/v1/rooms/" + room.getId());
         return Response.created(location).entity(room).build();
     }
-
+    
+    @GET
+    @Path("/test500")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response triggerError() {
+        throw new RuntimeException("Deliberate test error for demonstration");
+    }
+    
     @GET
     @Path("/{roomId}")
     public Response getRoomById(@PathParam("roomId") String roomId) {
@@ -53,7 +60,7 @@ public class RoomResource {
         }
         return Response.ok(room).build();
     }
-
+    
     @DELETE
     @Path("/{roomId}")
     public Response deleteRoom(@PathParam("roomId") String roomId) {

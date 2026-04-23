@@ -68,7 +68,7 @@ public class SensorResource {
         return Response.ok(sensor).build();
     }
 
-    @Path("/{sensorId}/readings")
+    @Path("{sensorId}/readings")
     public SensorReadingResource getReadingResource(@PathParam("sensorId") String sensorId) {
         Sensor sensor = store.getSensors().get(sensorId);
         if (sensor == null) {
