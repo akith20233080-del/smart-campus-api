@@ -10,7 +10,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Singleton in-memory data store.
- *
  * Because JAX-RS creates a new resource class instance per request by default,
  * we centralise all shared state here using thread-safe ConcurrentHashMap and
  * CopyOnWriteArrayList structures to prevent race conditions.
